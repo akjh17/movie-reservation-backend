@@ -1,0 +1,26 @@
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/auth');
+const movieRoutes = require('./routes/movies');
+const showRoutes = require('./routes/shows');
+const reservationRoutes = require('./routes/reservations');
+
+dotenv.config();
+const app = express();
+
+app.use(express.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/movies', movieRoutes);
+app.use('/api/shows', showRoutes);
+app.use('/api/reservations', reservationRoutes);
+
+// Connect DB
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true }, () => {
+  console.log('MongoDB Connected');
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
